@@ -1,0 +1,23 @@
+
+HW independent part
+===================
+
+. build/cbenv.sh
+cb_select arm
+make -j14
+
+
+HW dependent part
+==================
+
+Find a AOSP tree matching your target, . build/envsetup.sh and lunch it
+
+make -j14 libc libstlport liblog libz libm libdl libui libgui libutils libcutils libEGL libGLESv2 make_ext4fs
+
+In same session, go back to cuteboot and:
+
+make hwdep
+make img
+
+You get a fancy sparse cuteboot.img you can flash with fastboot cache
+
