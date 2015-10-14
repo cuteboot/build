@@ -1,0 +1,9 @@
+#!/bin/sh
+# If using normal root, avoid changing anything.
+
+for f in `find $1 -type f \( -perm -0100 -or -perm -0010 -or -perm -0001 \) -exec file {} \; | \
+        grep -v "^$1/\?usr/lib/debug"  | \
+	grep -v ' shared object,' | \
+	sed -n -e 's/^\(.*\):[ 	]*ELF.*, not stripped/\1/p'`; do
+	$STRIP -g $f || :
+done
