@@ -99,6 +99,11 @@ img:
 	cp -ar img img-symbols
 	STRIP=$(CROSS_COMPILE)strip build/strip-shared img
 	STRIP=$(CROSS_COMPILE)strip build/strip-executables img
+	mkdir -p img/usr/bin
+	cp $(ANDROID_PRODUCT_OUT)/system/xbin/su img/usr/bin
+	chmod 4755 img/usr/bin/su
+	mkdir -p img/usr/tmp
+	chmod 777 img/usr/tmp
 	du -s -h img
 	du -s -h img-symbols
 	$(ANDROID_HOST_OUT)/bin/make_ext4fs -l 200M -s -S build/file_contexts cuteboot.img img/usr

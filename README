@@ -1,4 +1,3 @@
-
 HW independent part
 ===================
 
@@ -14,7 +13,7 @@ Find a AOSP/codeaurora/vendor tree matching your target version, . build/envsetu
 
 Patch it in system/core with build/aosp-patches depending on version to disable selinux
 
-make -j14 libc libstlport liblog libz libm libdl libui libgui libutils libcutils libEGL libGLESv2 make_ext4fs init mkbootimg
+make -j14 libc libstlport liblog libz libm libdl libui libgui libutils libcutils libEGL libGLESv2 make_ext4fs init mkbootimg su
 
 In same session, go back to cuteboot and:
 
@@ -45,6 +44,7 @@ edit default.prop:
 find any fstab files:
 
 * make /cache partition mount on /usr instead
+* make sure /usr doesn't have nosuid, or ro, or nodev
 
 open init.rc:
 
@@ -83,10 +83,10 @@ trying out cuteboot
 
 * download http://qtl.me/minimer3.tar.gz
 * untar it
-* adb push minimer /data/local/tmp
+* adb push minimer /usr/tmp
 * adb shell
-# su
-# cd /data/local/tmp
+# /usr/bin/su
+# cd /usr/tmp
 replace WIDTH and HEIGHT values with the correct size of your screen
 # LD_LIBRARY_PATH=/usr/lib:/system/lib:/vendor/lib QT_QPA_EGLFS_INTEGRATION=eglfs_surfaceflinger QT_QPA_EGLFS_WIDTH=320 QT_QPA_EGLFS_HEIGHT=320 QT_QPA_EGLFS_HIDECURSOR=1 QT_QPA_EGLFS_DEBUG=1 QT_DEBUG_PLUGINS=1 /usr/lib/qt5/bin/qmlscene -platform eglfs main.qml
 

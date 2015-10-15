@@ -1,1 +1,2 @@
 (.*)?		u:object_r:system_file:s0
+bin/su          u:object_r:su_exec:s0
