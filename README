@@ -76,7 +76,7 @@ adb'ing in
 ==========
 
 * adb shell
-in adb: 'su' to make sure you can get root privileges
+in adb: '/usr/bin/su' to make sure you can get root privileges
 
 trying out cuteboot
 ===================
