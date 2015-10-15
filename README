@@ -10,9 +10,11 @@ make -j14
 HW dependent part
 ==================
 
-Find a AOSP tree matching your target, . build/envsetup.sh and lunch it
+Find a AOSP/codeaurora/vendor tree matching your target version, . build/envsetup.sh and lunch it
 
-make -j14 libc libstlport liblog libz libm libdl libui libgui libutils libcutils libEGL libGLESv2 make_ext4fs
+Patch it in system/core with build/aosp-patches depending on version to disable selinux
+
+make -j14 libc libstlport liblog libz libm libdl libui libgui libutils libcutils libEGL libGLESv2 make_ext4fs init mkbootimg
 
 In same session, go back to cuteboot and:
 
@@ -20,4 +22,73 @@ make hwdep
 make img
 
 You get a fancy sparse cuteboot.img you can flash with fastboot cache
+
+
+boot.img modification
+=====================
+
+Grab a boot.img matching the currently installed software on the device. This can be done on a rooted device with extraction of the boot partition usually, or through factory image with a bit of luck.
+
+Unpack it with build/split_bootimg.pl and note the name of the ramdisk.gz
+mkdir -p ramdisk
+cd ramdisk
+gzip -dc ../the-ramdisk.gz | cpio -idv
+
+edit default.prop:
+
+* make sure ro.secure=0
+* make sure ro.debuggable=1
+* switch ro.zygote to be =cuteboot  (so it doesn't try to start dalvik) 
+* make sure ro.adb.secure=0 and is there
+* add persist.sys.usb.config=mtp,adb
+
+find any fstab files:
+
+* make /cache partition mount on /usr instead
+
+open init.rc:
+
+* disable bootanimation service like this:
+
+#service bootanim /system/bin/bootanimation
+#    class core
+#    user graphics
+#    group graphics audio
+#    disabled
+#    oneshot
+
+copy $ANDROID_PRODUCT_OUT/root/init on top of init (this disables selinux which is a PITA)
+
+re-make the ramdisk like this:
+
+find . -print |cpio -H newc -o |gzip -9 > ../the-ramdisk.gz
+
+and re-make the boot.img using the instructions split_bootimg.pl gave
+
+flashing the device
+===================
+
+* fastboot oem unlock
+* fastboot flash cache cuteboot.img
+* fastboot boot boot.img 
+
+adb'ing in
+==========
+
+* adb shell
+in adb: 'su' to make sure you can get root privileges
+
+trying out cuteboot
+===================
+
+* download http://qtl.me/minimer3.tar.gz
+* untar it
+* adb push minimer /data/local/tmp
+* adb shell
+# su
+# cd /data/local/tmp
+replace WIDTH and HEIGHT values with the correct size of your screen
+# LD_LIBRARY_PATH=/usr/lib:/system/lib:/vendor/lib QT_QPA_EGLFS_INTEGRATION=eglfs_surfaceflinger QT_QPA_EGLFS_WIDTH=320 QT_QPA_EGLFS_HEIGHT=320 QT_QPA_EGLFS_HIDECURSOR=1 QT_QPA_EGLFS_DEBUG=1 QT_DEBUG_PLUGINS=1 /usr/lib/qt5/bin/qmlscene -platform eglfs main.qml
+
+if you're lucky, you should now see a spinning blue form
 

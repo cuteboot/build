@@ -1,0 +1,37 @@
+diff --git a/init/init.c b/init/init.c
+index bd1db7a..03b401d 100644
+--- a/init/init.c
++++ b/init/init.c
+@@ -888,6 +888,8 @@ void selinux_init_all_handles(void)
+ 
+ static bool selinux_is_disabled(void)
+ {
++    return false;
++#if 0
+ #ifdef ALLOW_DISABLE_SELINUX
+     char tmp[PROP_VALUE_MAX];
+ 
+@@ -905,10 +907,13 @@ static bool selinux_is_disabled(void)
+ #endif
+ 
+     return false;
++#endif
+ }
+ 
+ static bool selinux_is_enforcing(void)
+ {
++     return false;
++#if 0
+ #ifdef ALLOW_DISABLE_SELINUX
+     char tmp[PROP_VALUE_MAX];
+ 
+@@ -927,7 +932,9 @@ static bool selinux_is_enforcing(void)
+     }
+ 
+ #endif
++
+     return true;
++#endif
+ }
+ 
+ int selinux_reload_policy(void)
