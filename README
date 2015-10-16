@@ -1,5 +1,16 @@
+Prerequisites
+=============
+
+You need:
+
+* An Android device you'd like to "infect" :)
+* A repo-checked out Android tree matching your target device well enough, i.e. same AOSP version/build
+* A repo-checked out cuteboot manifest (see github.com/cuteboot/manifest)
+
 HW independent part
 ===================
+
+This should be done in your cuteboot tree.
 
 . build/cbenv.sh
 cb_select arm
@@ -9,10 +20,13 @@ make -j14
 HW dependent part
 ==================
 
-Find a AOSP/codeaurora/vendor tree matching your target version, . build/envsetup.sh and lunch it
+This should be done in the Android tree.
 
-Patch it in system/core with build/aosp-patches depending on version to disable selinux
-
+. build/envsetup.sh
+lunch (and select something suitable to your device (TBD: how?), e.g. aosp-arm-eng)
+pushd system/core
+patch -p1 < $CUTEBOOT_PATH/build/aosp-patches/aosp501-system-core-init-noselinux.patch (TBD: would be nice to script this)
+popd
 make -j14 libc libstlport liblog libz libm libdl libui libgui libutils libcutils libEGL libGLESv2 make_ext4fs init mkbootimg su
 
 In same session, go back to cuteboot and:
