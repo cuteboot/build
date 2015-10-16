@@ -10,9 +10,9 @@ You need:
 
 This should be done in your cuteboot tree.
 
-. build/cbenv.sh
-cb_select arm
-make -j14
+* . build/cbenv.sh
+* cb_select arm
+* make -j14
 
 
 ## HW dependent part
