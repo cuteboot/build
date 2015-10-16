@@ -101,8 +101,7 @@ trying out cuteboot
 * adb shell
 # /usr/bin/su
 # cd /usr/tmp
-replace WIDTH and HEIGHT values with the correct size of your screen
-# LD_LIBRARY_PATH=/usr/lib:/system/lib:/vendor/lib QT_QPA_EGLFS_INTEGRATION=eglfs_surfaceflinger QT_QPA_EGLFS_WIDTH=320 QT_QPA_EGLFS_HEIGHT=320 QT_QPA_EGLFS_HIDECURSOR=1 QT_QPA_EGLFS_DEBUG=1 QT_DEBUG_PLUGINS=1 /usr/lib/qt5/bin/qmlscene -platform eglfs main.qml
+# QT_QPA_GENERIC_PLUGINS=EvdevTouch QT_QPA_FONTDIR=/system/fonts LD_LIBRARY_PATH=/usr/lib:/system/lib:/vendor/lib QT_QPA_EGLFS_INTEGRATION=eglfs_surfaceflinger QT_QPA_EGLFS_HIDECURSOR=1 QT_QPA_EGLFS_DEBUG=1 QT_DEBUG_PLUGINS=1 /usr/lib/qt5/bin/qmlscene -platform eglfs main.qml
 
 if you're lucky, you should now see a spinning blue form
 
