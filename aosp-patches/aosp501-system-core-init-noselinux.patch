@@ -6,7 +6,7 @@ index bd1db7a..03b401d 100644
  
  static bool selinux_is_disabled(void)
  {
-+    return false;
++    return true;
 +#if 0
  #ifdef ALLOW_DISABLE_SELINUX
      char tmp[PROP_VALUE_MAX];
