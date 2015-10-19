@@ -4,7 +4,7 @@ CUTEBOOT_BUILD_TOP=$(PWD)
 
 all: sysroot subdirs qmlscene
 
-SUBDIRS = qtbase qtdeclarative
+SUBDIRS = qtbase qtdeclarative qtmultimedia
 
 .PHONY: subdirs $(SUBDIRS)
 
@@ -61,6 +61,14 @@ qmlscene: configure-qmlscene
 
 configure-qmlscene: qtdeclarative
 	cd qtdeclarative/tools/qmlscene; $(PWD)/bin/qmake "CONFIG += debug"
+
+qtmultimedia: configure-qtmultimedia
+	$(MAKE) -C $@
+	$(MAKE) -C $@ install
+
+configure-qtmultimedia: sysroot qtbase qtdeclarative
+	cd qtmultimedia; ../bin/qmake "CONFIG += debug"
+
 
 eglfs_surfaceflinger: configure-eglfs_surfaceflinger
 	$(MAKE) -C qtbase/src/plugins/platforms/eglfs/deviceintegration/eglfs_surfaceflinger
