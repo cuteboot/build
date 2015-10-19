@@ -4,7 +4,7 @@ CUTEBOOT_BUILD_TOP=$(PWD)
 
 all: sysroot subdirs qmlscene
 
-SUBDIRS = qtbase qtdeclarative qtmultimedia
+SUBDIRS = qtbase qtdeclarative qtmultimedia aidl
 
 .PHONY: subdirs $(SUBDIRS)
 
@@ -79,6 +79,36 @@ configure-eglfs_surfaceflinger: qtbase
 	cd qtbase/src/plugins/platforms/eglfs/deviceintegration/eglfs_surfaceflinger; $(PWD)/bin/qmake -spec unsupported/android-g++ "CONFIG += debug"	
 
 hwdep: eglfs_surfaceflinger
+
+aidl:
+	cd aidl ; \
+	$(PWD)/prebuilts/misc/linux-x86/flex/flex-2.5.39 aidl_language_l.l ; \
+	$(PWD)/prebuilts/misc/linux-x86/bison/bison --defines=aidl_language_y.hpp --output=aidl_language_y.cpp aidl_language_y.y ; \
+	$(PWD)/prebuilts/clang/linux-x86/host/3.5/bin/clang++ -o aidl_cpp \
+			aidl.cpp \
+			aidl_language.cpp \
+			aidl_language_y.cpp \
+			ast_cpp.cpp \
+			ast_java.cpp \
+			code_writer.cpp \
+			generate_cpp.cpp \
+			generate_java.cpp \
+			generate_java_binder.cpp \
+			import_resolver.cpp \
+			io_delegate.cpp \
+			options.cpp \
+			type_cpp.cpp \
+			type_java.cpp \
+			type_namespace.cpp \
+			-Iexternal/gtest/include \
+			-Ibase/include -I. -std=c++11 \
+			base/logging.cpp \
+			base/stringprintf.cpp \
+			base/strings.cpp \
+			lex.yy.c \
+			main_cpp.cpp ; \
+	mkdir -p $(PWD)/bin ; \
+	cp aidl_cpp $(PWD)/bin
 
 img:
 	rm -rf img img-symbols
