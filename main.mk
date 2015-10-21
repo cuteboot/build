@@ -4,7 +4,7 @@ CUTEBOOT_BUILD_TOP=$(PWD)
 
 all: sysroot subdirs qmlscene bin/aidl_cpp
 
-SUBDIRS = qtbase qtdeclarative qtmultimedia
+SUBDIRS = qtbase qtdeclarative qtmultimedia libcutebinder
 
 .PHONY: subdirs $(SUBDIRS)
 
@@ -78,7 +78,18 @@ eglfs_surfaceflinger: configure-eglfs_surfaceflinger
 configure-eglfs_surfaceflinger: qtbase
 	cd qtbase/src/plugins/platforms/eglfs/deviceintegration/eglfs_surfaceflinger; $(PWD)/bin/qmake -spec unsupported/android-g++ "CONFIG += debug"	
 
-hwdep: eglfs_surfaceflinger
+libcutebinder:	
+	$(MAKE) -C $@ -f Makefile.stubs CUTEBOOT_BUILD_TOP=$(CUTEBOOT_BUILD_TOP)
+	cd libcutebinder; $(PWD)/bin/qmake -spec unsupported/android-g++ "CONFIG += debug"
+	$(MAKE) -C $@
+	$(MAKE) -C $@ install
+
+cutesystemserver: libcutebinder
+	cd cutesystemserver; $(PWD)/bin/qmake -spec unsupported/android-g++ "CONFIG += debug"
+	$(MAKE) -C $@
+	$(MAKE) -C $@ install
+
+hwdep: eglfs_surfaceflinger libcutebinder cutesystemserver
 
 bin/aidl_cpp:
 	cd aidl_cpp ; \
