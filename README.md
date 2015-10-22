@@ -62,6 +62,8 @@ open init.rc:
 
 * disable bootanimation service like this:
 
+and at last, copy build/init.cuteboot.rc to same location as init.rc is in
+
 ```
 #service bootanim /system/bin/bootanimation
 #    class core

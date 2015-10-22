@@ -1,0 +1,6 @@
+service cuteboot /usr/bin/cuteboot.sh
+    class main
+    onrestart write /sys/android_power/request_state wake
+    onrestart write /sys/power/state on
+    onrestart restart media
+    onrestart restart netd
