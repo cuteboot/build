@@ -62,8 +62,6 @@ open init.rc:
 
 * disable bootanimation service like this:
 
-and at last, copy build/init.cuteboot.rc to same location as init.rc is in
-
 ```
 #service bootanim /system/bin/bootanimation
 #    class core
@@ -72,6 +70,10 @@ and at last, copy build/init.cuteboot.rc to same location as init.rc is in
 #    disabled
 #    oneshot
 ```
+
+copy build/init.cuteboot.rc to same location as init.rc is in
+
+* chmod 0750 init.cuteboot.rc
 
 Copy $ANDROID_PRODUCT_OUT/root/init on top of init (this disables selinux which is a PITA)
 
