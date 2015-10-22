@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/system/bin/sh
 export QT_QPA_PLATFORM=eglfs
 export QT_QPA_GENERIC_PLUGINS=EvdevTouch
 export QT_QPA_FONTDIR=/system/fonts
